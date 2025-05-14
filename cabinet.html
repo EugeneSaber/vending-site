@@ -254,19 +254,25 @@
     function viewPurchaseDetails(purchaseId) {
       alert(`Просмотр деталей покупки ${purchaseId}`);
     }
-     // Получаем имя пользователя (например, из localStorage)
-    const username = localStorage.getItem('username'); // Пример из localStorage
-    const greetingElement = document.getElementById('username');
+     // Получаем имя пользователя из localStorage
+const username = localStorage.getItem('username'); 
+const greetingElement = document.getElementById('username');
 
-    // Проверяем, если имя пользователя есть, подставляем его, иначе оставляем "Гость"
-    if (username) {
-      greetingElement.textContent = `Здравствуйте, ${username}!`; // Подставляем имя через JavaScript
-    } else {
-      greetingElement.textContent = 'Здравствуйте, Гость!'; // Если нет авторизации
-    }
-
+// Проверяем, если имя пользователя есть, подставляем его, иначе оставляем "Гость"
+if (username) {
+  greetingElement.textContent = `Здравствуйте, ${username}!`; 
+} else {
+  greetingElement.textContent = 'Здравствуйте, Гость!';
+}
     // Пример записи имени в localStorage после авторизации
     // localStorage.setItem('username', 'Иван'); // Это происходит при успешной авторизации
+function logout() {
+  // Логика для выхода
+  localStorage.removeItem('user');
+  localStorage.removeItem('username');
+  alert("Вы успешно вышли.");
+  window.location.href = "index.html"; // Редирект на главную страницу
+}
   </script>
 </body>
 </html>
