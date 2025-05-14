@@ -3,58 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <title>Авторизация</title>
-  <script type="module">
-    // Firebase SDK
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, OAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-    // 🔁 ВСТАВЬ СЮДА СВОИ ДАННЫЕ
-    const firebaseConfig = {
-      apiKey: "AIzaSyCBKD2_Ebuo0yJSIbVBGJWXKfXBGJIbs-E",
-  authDomain: "vending-site.firebaseapp.com",
-  projectId: "vending-site",
-  storageBucket: "vending-site.firebasestorage.app",
-  messagingSenderId: "721597519495",
-  appId: "1:721597519495:web:c87c3d3038e13a02528a22",
-  measurementId: "G-8CKNNDW04Q"
-    };
+  <!-- Google Identity Services -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth();
-
-    // Вход через Google
-    document.getElementById("google-login").onclick = async () => {
-      try {
-        const result = await signInWithPopup(auth, new GoogleAuthProvider());
-        alert("Привет, " + result.user.displayName);
-        window.location.href = "profile.html";
-      } catch (e) {
-        alert("Ошибка входа через Google: " + e.message);
-      }
-    };
-
-    // Вход через Facebook
-    document.getElementById("facebook-login").onclick = async () => {
-      try {
-        const result = await signInWithPopup(auth, new FacebookAuthProvider());
-        alert("Привет, " + result.user.displayName);
-        window.location.href = "profile.html";
-      } catch (e) {
-        alert("Ошибка входа через Facebook: " + e.message);
-      }
-    };
-
-    // Вход через Apple ID
-    document.getElementById("apple-login").onclick = async () => {
-      try {
-        const result = await signInWithPopup(auth, new OAuthProvider("apple.com"));
-        alert("Привет, " + result.user.displayName);
-        window.location.href = "profile.html";
-      } catch (e) {
-        alert("Ошибка входа через Apple: " + e.message);
-      }
-    };
-  </script>
+  <!-- Facebook SDK -->
+  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
 
   <style>
     body {
@@ -104,10 +58,39 @@
   <h1>Добро пожаловать!</h1>
   <p>Пожалуйста, войдите в систему, чтобы начать пользоваться сервисом и накапливать кешбэк.</p>
 
-  <button class="login-button" id="google-login">
-    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
-    Войти через Google
-  </button>
+  <!-- Вставить перед закрывающим </body> -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
+<div id="g_id_onload"
+     data-client_id="634487427489-a3k2nop2pi8ffpprahnchnvbr08djhlp.apps.googleusercontent.com"
+     data-context="signin"
+     data-ux_mode="popup"
+     data-callback="handleCredentialResponse"
+     data-auto_prompt="false">
+</div>
+
+<div class="g_id_signin"
+     data-type="standard"
+     data-shape="rectangular"
+     data-theme="outline"
+     data-text="signin_with"
+     data-size="large"
+     data-logo_alignment="left">
+</div>
+
+<script>
+  function handleCredentialResponse(response) {
+    const jwt = response.credential;
+    // Распарсить JWT-токен (можно заменить на своё)
+    const payload = JSON.parse(atob(jwt.split('.')[1]));
+    alert("Привет, " + payload.name);
+    localStorage.setItem("user", JSON.stringify(payload));
+    window.location.href = "profile.html";
+  }
+</script>
+
+  </div>
+ 
 
   <button class="login-button" id="facebook-login" style="background-color:#3b5998">
     <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/facebook.svg" alt="Facebook">
@@ -121,5 +104,55 @@
 
   <p class="note">Продолжая, вы соглашаетесь с нашей <a href="#">политикой конфиденциальности</a>.</p>
 
+  <script>
+    // Google
+    function handleGoogleLogin(response) {
+      const id_token = response.credential;
+      const payload = parseJwt(id_token);
+      alert("Привет, " + payload.name);
+      localStorage.setItem("user", JSON.stringify(payload));
+      window.location.href = "profile.html";
+    }
+
+    function parseJwt(token) {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      return JSON.parse(atob(base64));
+    }
+
+    // Facebook
+    window.fbAsyncInit = function () {
+      FB.init({
+        appId: 'ВАШ_FACEBOOK_APP_ID',
+        cookie: true,
+        xfbml: true,
+        version: 'v19.0'
+      });
+    };
+
+    document.getElementById("facebook-login").onclick = function () {
+      FB.login(function (response) {
+        if (response.authResponse) {
+          FB.api('/me', { fields: 'name,email,picture' }, function (profile) {
+            alert("Привет, " + profile.name);
+            localStorage.setItem("user", JSON.stringify(profile));
+            window.location.href = "profile.html";
+          });
+        } else {
+          alert("Ошибка входа через Facebook");
+        }
+      }, { scope: 'public_profile,email' });
+    };
+
+    // Apple
+    document.getElementById("apple-login").onclick = function () {
+      const clientId = 'ВАШ_APPLE_SERVICE_ID';
+      const redirectUri = encodeURIComponent(window.location.origin + '/vending-site/');
+      const state = Math.random().toString(36).substring(7);
+      const nonce = Math.random().toString(36).substring(7);
+      const url = `https://appleid.apple.com/auth/authorize?response_type=code%20id_token&client_id=${clientId}&redirect_uri=${redirectUri}&scope=name%20email&response_mode=fragment&state=${state}&nonce=${nonce}`;
+      window.location.href = url;
+    };
+  </script>
 </body>
 </html>
