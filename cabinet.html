@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Личный кабинет - CoffeeStyle</title>
-   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
@@ -34,16 +34,6 @@
       animation: fadeInUp 0.6s ease forwards;
     }
 
-    .card:nth-child(1) { animation-delay: 0.2s; }
-    .card:nth-child(2) { animation-delay: 0.4s; }
-    .card:nth-child(3) { animation-delay: 0.6s; }
-
-    .cashback-card {
-      background-color: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(4px);
-      border-radius: 10px;
-    }
-
     @keyframes fadeInUp {
       to {
         opacity: 1;
@@ -66,67 +56,27 @@
       color: #fff;
     }
 
-    .btn-light {
-      background-color: #fff;
-      color: #4B2E2B;
-    }
-
-    .btn-outline-secondary {
-      border-color: #fff;
-      color: #fff;
-    }
-
     .btn-danger {
       background-color: #8B0000;
       border: none;
     }
-
-    .star {
-      font-size: 1.5rem;
-      color: #ccc;
-      cursor: pointer;
-      transition: color 0.2s ease;
-    }
-
-    .star:hover,
-    .star.selected {
-      color: #FFD700;
-    }
-
-    .list-group-item {
-      background-color: rgba(0, 0, 0, 0.5);
-      color: #fff;
-      border: none;
-    }
-
-    .text-note {
-      color: #ffdead;
-    }
-
-    .icon-svg {
-      width: 1.2rem;
-      height: 1.2rem;
-      margin-right: 6px;
-      vertical-align: middle;
-    }
   </style>
 </head>
 <body>
+
   <div class="container py-5">
     <div class="text-center mb-4">
       <h2>Здравствуйте, Иван!</h2>
-      <p class="text-muted text-light">Рады снова видеть вас 😊</p>
+      <p class="text-muted">Рады снова видеть вас 😊</p>
     </div>
 
     <div class="row g-4">
       <div class="col-md-6">
-        <div class="card mb-3 cashback-card">
+        <div class="card mb-3">
           <div class="card-body">
-            <h4 class="card-title">
-              <h4 class="card-title"><i class="bi bi-cash-coin"></i> Ваш кешбэк
-            </h4>
+            <h4 class="card-title"><i class="bi bi-cash-coin"></i> Ваш кешбэк</h4>
             <p class="card-text fs-2">4.75 CAD</p>
-            <button class="btn btn-light" data-bs-toggle="tooltip" title="Минимум 10 CAD для вывода">Вывести кешбэк</button>
+            <button class="btn btn-light">Вывести кешбэк</button>
           </div>
         </div>
       </div>
@@ -134,9 +84,7 @@
       <div class="col-md-6">
         <div class="card mb-3">
           <div class="card-body">
-            <h4 class="card-title">
-              <h4 class="card-title"><i class="bi bi-cup-hot"></i> Прогресс к бонусу
-            </h4>
+            <h4 class="card-title"><i class="bi bi-cup-hot"></i> Прогресс к бонусу</h4>
             <p class="card-text">Осталось 3 чашки до бонуса</p>
             <div class="progress">
               <div class="progress-bar" style="width: 75%;">9 из 12</div>
@@ -147,74 +95,18 @@
     </div>
 
     <div class="card mb-4">
-      <div class="card-body">
-        <h5 class="card-title">
-          <h5 class="card-title"><i class="bi bi-clock-history"></i> История покупок
-        </h5>
-        <ul class="list-group">
-          <li class="list-group-item d-flex justify-content-between">
-            <span>Кофе Американо</span><span>4.00 CAD</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between">
-            <span>Капучино + батончик</span><span>6.00 CAD</span>
-          </li>
-          <li class="list-group-item d-flex justify-content-between">
-            <span>Кофе Латте</span><span>4.00 CAD</span>
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="card mb-4">
       <div class="card-body text-center">
-             <h5 class="card-title">💬 Личный бот-помощник (ChatGPT)</h5>
-        </h5>
+        <h5 class="card-title">💬 Личный бот-помощник (ChatGPT)</h5>
         <p class="card-text">У вас есть <strong>5 минут</strong> бесплатного общения с ChatGPT сегодня.</p>
         <a href="chatbot.html" class="btn btn-primary"><i class="bi bi-chat-dots-fill me-1"></i> Открыть чат</a>
-        <p class="text-note mt-2 small">⏳ Время замирает, если вы не активны. Доступ обновляется ежедневно.</p>
       </div>
-    </div>
-
-    <div class="text-center mb-4">
-      <h5>Оцените наш сервис:</h5>
-      <div id="rating-stars">
-        <span class="star" data-value="1">★</span>
-        <span class="star" data-value="2">★</span>
-        <span class="star" data-value="3">★</span>
-        <span class="star" data-value="4">★</span>
-        <span class="star" data-value="5">★</span>
-      </div>
-      <button class="btn btn-outline-secondary mt-3" data-bs-toggle="tooltip" title="Поделитесь впечатлениями">Оставить отзыв</button>
     </div>
 
     <div class="text-center">
-      <button class="btn btn-danger" data-bs-toggle="tooltip" title="Завершить сессию">Выйти</button>
+      <button class="btn btn-danger">Выйти</button>
     </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    // Параллакс фон
-    document.addEventListener('mousemove', (e) => {
-      const x = (e.clientX / window.innerWidth) * 10;
-      const y = (e.clientY / window.innerHeight) * 10;
-      document.body.style.backgroundPosition = `${50 - x}% ${50 - y}%`;
-    });
-
-    // Tooltip активация
-    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    tooltipTriggerList.forEach(el => new bootstrap.Tooltip(el))
-
-    // Рейтинг: выбор звёзд
-    const stars = document.querySelectorAll('.star');
-    stars.forEach(star => {
-      star.addEventListener('click', () => {
-        const value = +star.dataset.value;
-        stars.forEach(s => {
-          s.classList.toggle('selected', +s.dataset.value <= value);
-        });
-      });
-    });
-  </script>
 </body>
 </html>
