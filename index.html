@@ -3,9 +3,59 @@
 <head>
   <meta charset="UTF-8">
   <title>Авторизация</title>
+  <script type="module">
+    // Firebase SDK
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, OAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    // 🔁 ВСТАВЬ СЮДА СВОИ ДАННЫЕ
+    const firebaseConfig = {
+      apiKey: "AIzaSyCBKD2_Ebuo0yJSIbVBGJWXKfXBGJIbs-E",
+      authDomain: "vending-site.firebaseapp.com",
+      projectId: "vending-site",
+      appId: "ТВОЙ_APP_ID",
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+
+    // Вход через Google
+    document.getElementById("google-login").onclick = async () => {
+      try {
+        const result = await signInWithPopup(auth, new GoogleAuthProvider());
+        alert("Привет, " + result.user.displayName);
+        window.location.href = "profile.html";
+      } catch (e) {
+        alert("Ошибка входа через Google: " + e.message);
+      }
+    };
+
+    // Вход через Facebook
+    document.getElementById("facebook-login").onclick = async () => {
+      try {
+        const result = await signInWithPopup(auth, new FacebookAuthProvider());
+        alert("Привет, " + result.user.displayName);
+        window.location.href = "profile.html";
+      } catch (e) {
+        alert("Ошибка входа через Facebook: " + e.message);
+      }
+    };
+
+    // Вход через Apple ID
+    document.getElementById("apple-login").onclick = async () => {
+      try {
+        const result = await signInWithPopup(auth, new OAuthProvider("apple.com"));
+        alert("Привет, " + result.user.displayName);
+        window.location.href = "profile.html";
+      } catch (e) {
+        alert("Ошибка входа через Apple: " + e.message);
+      }
+    };
+  </script>
+
   <style>
     body {
-      background-color: #ffffff;
+      background: linear-gradient(to bottom right, #e3f2fd, #ffffff);
       font-family: Arial, sans-serif;
       text-align: center;
       padding: 60px 20px;
@@ -18,8 +68,11 @@
       margin-bottom: 30px;
     }
     .login-button {
-      display: block;
-      width: 250px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 280px;
       margin: 10px auto;
       padding: 12px;
       font-size: 16px;
@@ -33,6 +86,9 @@
     .login-button:hover {
       background-color: #45a049;
     }
+    .login-button img {
+      height: 20px;
+    }
     .note {
       margin-top: 40px;
       font-size: 12px;
@@ -43,11 +99,22 @@
 <body>
 
   <h1>Добро пожаловать!</h1>
-  <p>Пожалуйста, войдите в систему, чтобы начать пользоваться нашим сервисом и накапливать кешбэк.</p>
+  <p>Пожалуйста, войдите в систему, чтобы начать пользоваться сервисом и накапливать кешбэк.</p>
 
-  <button class="login-button">Войти через Google</button>
-  <button class="login-button">Войти через Facebook</button>
-  <button class="login-button">Войти через Apple ID</button>
+  <button class="login-button" id="google-login">
+    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+    Войти через Google
+  </button>
+
+  <button class="login-button" id="facebook-login" style="background-color:#3b5998">
+    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/facebook.svg" alt="Facebook">
+    Войти через Facebook
+  </button>
+
+  <button class="login-button" id="apple-login" style="background-color:#000">
+    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/apple.svg" alt="Apple">
+    Войти через Apple ID
+  </button>
 
   <p class="note">Продолжая, вы соглашаетесь с нашей <a href="#">политикой конфиденциальности</a>.</p>
 
