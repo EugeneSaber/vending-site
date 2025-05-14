@@ -60,6 +60,46 @@
       background-color: #8B0000;
       border: none;
     }
+
+    /* Добавление стилей для звезд */
+    .stars {
+      font-size: 1.5rem;
+      color: #FFD700;
+    }
+
+    .stars .bi-star {
+      cursor: pointer;
+    }
+
+    /* Стили для истории покупок */
+    .purchase-history {
+      background-color: rgba(0, 100, 0, 0.85);
+      border-radius: 10px;
+      padding: 1rem;
+    }
+
+    .purchase-history table {
+      width: 100%;
+      color: #fff;
+    }
+
+    .purchase-history th, .purchase-history td {
+      padding: 0.75rem;
+      text-align: center;
+    }
+
+    .purchase-history th {
+      background-color: #4B8E29;
+    }
+
+    .purchase-history tr:nth-child(even) {
+      background-color: #6B9B4F;
+    }
+
+    .purchase-history tr:hover {
+      background-color: #4B8E29;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -76,7 +116,8 @@
           <div class="card-body">
             <h4 class="card-title"><i class="bi bi-cash-coin"></i> Ваш кешбэк</h4>
             <p class="card-text fs-2">4.75 CAD</p>
-            <button class="btn btn-light">Вывести кешбэк</button>
+            <!-- Подсказка при наведении -->
+            <button class="btn btn-light" title="Минимальная сумма для вывода — 10 CAD" onclick="handleCashback()">Вывести кешбэк</button>
           </div>
         </div>
       </div>
@@ -98,15 +139,121 @@
       <div class="card-body text-center">
         <h5 class="card-title">💬 Личный бот-помощник (ChatGPT)</h5>
         <p class="card-text">У вас есть <strong>5 минут</strong> бесплатного общения с ChatGPT сегодня.</p>
+        <!-- Кнопка для перехода в чат -->
         <a href="chatbot.html" class="btn btn-primary"><i class="bi bi-chat-dots-fill me-1"></i> Открыть чат</a>
       </div>
     </div>
 
-    <div class="text-center">
-      <button class="btn btn-danger">Выйти</button>
+    <!-- Блок с историей покупок -->
+    <div class="card mb-4 purchase-history">
+      <div class="card-body">
+        <h5 class="card-title">🛒 История покупок</h5>
+        <table>
+          <thead>
+            <tr>
+              <th>Дата</th>
+              <th>Товар</th>
+              <th>Сумма</th>
+              <th>Детали</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr onclick="viewPurchaseDetails('1')">
+              <td>12.05.2025</td>
+              <td>Кофе капучино</td>
+              <td>3.50 CAD</td>
+              <td><i class="bi bi-eye"></i></td>
+            </tr>
+            <tr onclick="viewPurchaseDetails('2')">
+              <td>10.05.2025</td>
+              <td>Торт "Чизкейк"</td>
+              <td>4.00 CAD</td>
+              <td><i class="bi bi-eye"></i></td>
+            </tr>
+            <tr onclick="viewPurchaseDetails('3')">
+              <td>08.05.2025</td>
+              <td>Кофе латте</td>
+              <td>3.00 CAD</td>
+              <td><i class="bi bi-eye"></i></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
+
+    <!-- Добавление кнопок отзыва и смены языка -->
+    <div class="row mb-4 text-center">
+      <div class="col-6">
+        <!-- Кнопка для отзыва -->
+        <a href="feedback.html" class="btn btn-light"><i class="bi bi-pencil-square"></i> Оставить отзыв</a>
+      </div>
+      <div class="col-6">
+        <!-- Звезды для оценки -->
+        <div class="stars">
+          <i class="bi bi-star" onclick="rateService(1)"></i>
+          <i class="bi bi-star" onclick="rateService(2)"></i>
+          <i class="bi bi-star" onclick="rateService(3)"></i>
+          <i class="bi bi-star" onclick="rateService(4)"></i>
+          <i class="bi bi-star" onclick="rateService(5)"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Кнопка для выхода -->
+    <div class="text-center">
+      <button class="btn btn-danger" onclick="logout()">Выйти</button>
+    </div>
+
+    <!-- Кнопка смены языка -->
+    <div class="text-center mt-4">
+      <button class="btn btn-light" onclick="changeLanguage('ru')">Русский</button>
+      <button class="btn btn-light" onclick="changeLanguage('en')">English</button>
+      <button class="btn btn-light" onclick="changeLanguage('fr')">Français</button>
+      <button class="btn btn-light" onclick="changeLanguage('de')">Deutsch</button>
+      <button class="btn btn-light" onclick="changeLanguage('ua')">Українська</button>
+    </div>
+
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Функция для вывода кешбэка
+    function handleCashback() {
+      const cashback = 4.75;
+      const minimumCashback = 10.00;
+
+      if (cashback >= minimumCashback) {
+        alert("Ваш кешбэк был выведен на вашу карту.");
+      } else {
+        alert("Для вывода кешбэка требуется минимум 10 CAD.");
+      }
+    }
+
+    // Функция для выхода
+    function logout() {
+      // Логика для выхода
+      alert("Вы успешно вышли.");
+      window.location.href = "index.html"; // Редирект на главную страницу
+    }
+
+    // Функция для смены языка
+    function changeLanguage(lang) {
+      // Здесь можно реализовать изменение языка страницы (перезагрузить с параметром в URL или использовать локальное хранилище)
+      alert(`Язык изменен на ${lang}`);
+      // Пример изменения языка через URL параметр (или можно использовать локальное хранилище)
+      window.location.href = `${window.location.pathname}?lang=${lang}`;
+    }
+
+    // Функция для оценки
+    function rateService(rating) {
+      alert(`Вы оценили сервис на ${rating} звезды.`);
+    }
+
+    // Функция для просмотра деталей покупки
+    function viewPurchaseDetails(purchaseId) {
+      alert(`Просмотр деталей покупки ${purchaseId}`);
+    }
+  </script>
 </body>
 </html>
