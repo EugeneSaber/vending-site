@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Чат с ChatGPT</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #e5ddd5;
+    }
+    .chat-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    .chat-header {
+      background: #0088cc;
+      color: #fff;
+      padding: 1rem;
+      text-align: center;
+    }
+    .chat-box {
+      height: 450px;
+      overflow-y: auto;
+      padding: 1rem;
+      background: #d2f5cb;
+    }
+    .message {
+      max-width: 80%;
+      padding: .6rem .9rem;
+      margin-bottom: 0.5rem;
+      border-radius: 1rem;
+      position: relative;
+      display: inline-block;
+      word-wrap: break-word;
+    }
+    .bot {
+      background: #ffffff;
+      align-self: flex-start;
+      margin-right: auto;
+    }
+    .user {
+      background: #dcf8c6;
+      align-self: flex-end;
+      margin-left: auto;
+      text-align: right;
+    }
+    .input-group {
+      padding: 1rem;
+      background: #f1f1f1;
+    }
+    .timer-bar {
+      font-size: 0.9rem;
+      text-align: center;
+      padding: 0.5rem;
+      background: #fff3cd;
+      color: #856404;
+    }
+  </style>
+</head>
+<body>
+
+<div class="chat-container mt-4">
+  <div class="chat-header">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg" alt="ChatGPT" width="30">
+    <strong class="ms-2">Чат с ChatGPT</strong>
+  </div>
+
+  <div class="timer-bar">
+    Осталось: <span id="timer">5:00</span>. Время останавливается, пока вы неактивны.
+  </div>
+
+  <div class="chat-box d-flex flex-column" id="chatBox">
+    <div class="message bot">👋 Привет! Я ChatGPT. Чем могу помочь?</div>
+  </div>
+
+  <form id="chatForm" class="input-group">
+    <input type="text" id="userInput" class="form-control" placeholder="Напишите сообщение..." autocomplete="off" required>
+    <button class="btn btn-primary" type="submit">➡</button>
+  </form>
+</div>
+
+<div class="text-center mt-3">
+  <a href="cabinet.html" class="btn btn-outline-dark">← Вернуться в кабинет</a>
+</div>
+
+<script>
+  let remainingTime = 5 * 60; // 5 минут
+  let timerInterval;
+  let isPaused = false;
+  let lastActivity = Date.now();
+
+  const timerEl = document.getElementById("timer");
+
+  function updateTimerUI() {
+    const min = Math.floor(remainingTime / 60);
+    const sec = remainingTime % 60;
+    timerEl.textContent = `${min}:${sec.toString().padStart(2, '0')}`;
+  }
+
+  function startTimer() {
+    if (timerInterval) return;
+    timerInterval = setInterval(() => {
+      const now = Date.now();
+      if (!isPaused && now - lastActivity < 15000) {
+        remainingTime--;
+        updateTimerUI();
+        if (remainingTime <= 0) {
+          clearInterval(timerInterval);
+          disableChat();
+        }
+      }
+    }, 1000);
+  }
+
+  function registerActivity() {
+    lastActivity = Date.now();
+    isPaused = false;
+  }
+
+  function disableChat() {
+    document.getElementById("userInput").disabled = true;
+    document.querySelector("#chatForm button").disabled = true;
+    addMessage("bot", "⏳ Время истекло. Возвращайтесь завтра или подключите подписку.");
+  }
+
+  function addMessage(sender, text) {
+    const msg = document.createElement("div");
+    msg.classList.add("message", sender);
+    msg.textContent = text;
+    document.getElementById("chatBox").appendChild(msg);
+    document.getElementById("chatBox").scrollTop = document.getElementById("chatBox").scrollHeight;
+  }
+
+  document.getElementById("chatForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const input = document.getElementById("userInput");
+    const text = input.value.trim();
+    if (!text) return;
+    addMessage("user", text);
+    input.value = "";
+    setTimeout(() => {
+      addMessage("bot", "🤖 Это пример ответа ChatGPT.");
+    }, 700);
+    registerActivity();
+    startTimer();
+  });
+
+  ['click', 'keypress', 'mousemove', 'touchstart'].forEach(evt =>
+    document.addEventListener(evt, registerActivity)
+  );
+  window.addEventListener("blur", () => isPaused = true);
+  window.addEventListener("focus", registerActivity);
+
+  updateTimerUI();
+</script>
+
+</body>
+</html>
