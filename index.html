@@ -76,13 +76,18 @@
   </div>
 
   <script>
-    function handleCredentialResponse(response) {
-      const jwt = response.credential;
-      const payload = JSON.parse(atob(jwt.split('.')[1]));
-      alert("Привет, " + payload.name);
-      localStorage.setItem("user", JSON.stringify(payload));
-      window.location.href = "profile.html";
-    }
+   function handleCredentialResponse(response) {
+    const jwt = response.credential;
+    const payload = JSON.parse(atob(jwt.split('.')[1]));
+    alert("Привет, " + payload.name);
+
+    // Сохраняем данные в localStorage
+    localStorage.setItem("user", JSON.stringify(payload));
+    localStorage.setItem("username", payload.name); // Запоминаем имя пользователя
+
+    // Переходим на профиль
+    window.location.href = "profile.html";
+  }
   </script>
 
   <button class="login-button" id="facebook-login" style="background-color:#3b5998">
@@ -99,38 +104,43 @@
 
   <script>
     // Facebook
-    window.fbAsyncInit = function () {
-      FB.init({
-        appId: 'ВАШ_FACEBOOK_APP_ID',
-        cookie: true,
-        xfbml: true,
-        version: 'v19.0'
+   window.fbAsyncInit = function () {
+  FB.init({
+    appId: 'ВАШ_FACEBOOK_APP_ID',
+    cookie: true,
+    xfbml: true,
+    version: 'v19.0'
+  });
+};
+
+document.getElementById("facebook-login").onclick = function () {
+  FB.login(function (response) {
+    if (response.authResponse) {
+      FB.api('/me', { fields: 'name,email,picture' }, function (profile) {
+        alert("Привет, " + profile.name);
+
+        // Сохраняем данные в localStorage
+        localStorage.setItem("user", JSON.stringify(profile));
+        localStorage.setItem("username", profile.name); // Запоминаем имя пользователя
+
+        // Переходим на профиль
+        window.location.href = "profile.html";
       });
-    };
-
-    document.getElementById("facebook-login").onclick = function () {
-      FB.login(function (response) {
-        if (response.authResponse) {
-          FB.api('/me', { fields: 'name,email,picture' }, function (profile) {
-            alert("Привет, " + profile.name);
-            localStorage.setItem("user", JSON.stringify(profile));
-            window.location.href = "profile.html";
-          });
-        } else {
-          alert("Ошибка входа через Facebook");
-        }
-      }, { scope: 'public_profile,email' });
-    };
-
+    } else {
+      alert("Ошибка входа через Facebook");
+    }
+  }, { scope: 'public_profile,email' });
+};
     // Apple
     document.getElementById("apple-login").onclick = function () {
-      const clientId = 'ВАШ_APPLE_SERVICE_ID';
-      const redirectUri = encodeURIComponent(window.location.origin + '/vending-site/');
-      const state = Math.random().toString(36).substring(7);
-      const nonce = Math.random().toString(36).substring(7);
-      const url = `https://appleid.apple.com/auth/authorize?response_type=code%20id_token&client_id=${clientId}&redirect_uri=${redirectUri}&scope=name%20email&response_mode=fragment&state=${state}&nonce=${nonce}`;
-      window.location.href = url;
-    };
+  const clientId = 'ВАШ_APPLE_SERVICE_ID'; // Укажите свой client ID, который вы получите от Apple
+  const redirectUri = encodeURIComponent(window.location.origin + '/vending-site/'); // Укажите правильный редирект
+  const state = Math.random().toString(36).substring(7);
+  const nonce = Math.random().toString(36).substring(7);
+  const url = `https://appleid.apple.com/auth/authorize?response_type=code%20id_token&client_id=${clientId}&redirect_uri=${redirectUri}&scope=name%20email&response_mode=fragment&state=${state}&nonce=${nonce}`;
+
+  window.location.href = url;
+};
   </script>
 
 </body>
