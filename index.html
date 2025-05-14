@@ -58,39 +58,32 @@
   <h1>Добро пожаловать!</h1>
   <p>Пожалуйста, войдите в систему, чтобы начать пользоваться сервисом и накапливать кешбэк.</p>
 
-  <!-- Вставить перед закрывающим </body> -->
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-
-<div id="g_id_onload"
-     data-client_id="634487427489-a3k2nop2pi8ffpprahnchnvbr08djhlp.apps.googleusercontent.com"
-     data-context="signin"
-     data-ux_mode="popup"
-     data-callback="handleCredentialResponse"
-     data-auto_prompt="false">
-</div>
-
-<div class="g_id_signin"
-     data-type="standard"
-     data-shape="rectangular"
-     data-theme="outline"
-     data-text="signin_with"
-     data-size="large"
-     data-logo_alignment="left">
-</div>
-
-<script>
-  function handleCredentialResponse(response) {
-    const jwt = response.credential;
-    // Распарсить JWT-токен (можно заменить на своё)
-    const payload = JSON.parse(atob(jwt.split('.')[1]));
-    alert("Привет, " + payload.name);
-    localStorage.setItem("user", JSON.stringify(payload));
-    window.location.href = "profile.html";
-  }
-</script>
-
+  <div id="g_id_onload"
+       data-client_id="634487427489-a3k2nop2pi8ffpprahnchnvbr08djhlp.apps.googleusercontent.com"
+       data-context="signin"
+       data-ux_mode="popup"
+       data-callback="handleCredentialResponse"
+       data-auto_prompt="false">
   </div>
- 
+
+  <div class="g_id_signin"
+       data-type="standard"
+       data-shape="rectangular"
+       data-theme="outline"
+       data-text="signin_with"
+       data-size="large"
+       data-logo_alignment="left">
+  </div>
+
+  <script>
+    function handleCredentialResponse(response) {
+      const jwt = response.credential;
+      const payload = JSON.parse(atob(jwt.split('.')[1]));
+      alert("Привет, " + payload.name);
+      localStorage.setItem("user", JSON.stringify(payload));
+      window.location.href = "profile.html";
+    }
+  </script>
 
   <button class="login-button" id="facebook-login" style="background-color:#3b5998">
     <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/facebook.svg" alt="Facebook">
@@ -105,21 +98,6 @@
   <p class="note">Продолжая, вы соглашаетесь с нашей <a href="#">политикой конфиденциальности</a>.</p>
 
   <script>
-    // Google
-    function handleGoogleLogin(response) {
-      const id_token = response.credential;
-      const payload = parseJwt(id_token);
-      alert("Привет, " + payload.name);
-      localStorage.setItem("user", JSON.stringify(payload));
-      window.location.href = "profile.html";
-    }
-
-    function parseJwt(token) {
-      const base64Url = token.split('.')[1];
-      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-      return JSON.parse(atob(base64));
-    }
-
     // Facebook
     window.fbAsyncInit = function () {
       FB.init({
@@ -154,5 +132,6 @@
       window.location.href = url;
     };
   </script>
+
 </body>
 </html>
